@@ -1,10 +1,7 @@
 ---
 title: "Simulations In-Class Project"
 date: "Due October 13, 2017 at 11:59pm"
-output:
-  github_document
-
-
+output: github_document
 ---
 
 <style type="text/css">
@@ -21,15 +18,9 @@ output:
 options(scipen = 3, digits = 3)
 ```
 
-
-
-
 #Project Goals:
 
-
-
 With this project we will simulate a famous probability problem. This will not require knowledge of probability or statistics but only the logic to follow the steps in order to simulate this problem. This is one way to solve problems by using the computer. 
-
 
 Since you all have completed problem 1, yaou first step will be to work through each of your groupmates code for problem #1 and comment on what is happening. Then as a team move forward in on direction as you move on to the rest of the problems 2-5
 
@@ -96,7 +87,6 @@ mean.500
 var.500
 ```
   
- 
 Note: you *must* stop playing if your player has gone bust. How will you handle this in the `for` loop?
 
 2. Repeat the previous problem with betting on black in American roulette, where the probability of winning on any spin is 18/38 for an even payout.
@@ -124,15 +114,12 @@ mean.100.roulette<-mean(hand.100.roulette, na.rm = TRUE)
 var.100.roulette<-var(hand.100.roulette, na.rm = TRUE)
 mean.100.roulette
 var.100.roulette
-
-
 ```
-
 
 3. **Markov Chains**. Suppose you have a game where the probability of winning on your first hand is 48%; each time you win, that probability goes up by one percentage point for the next game (to a maximum of 100%, where it must stay), and each time you lose, it goes back down to 48%. Assume you cannot go bust and that the size of your wager is a constant $100.
 
-
   a. Is this a fair game? Simulate one hundred thousand sequential hands to determine the size of your return. Then repeat this simulation 99 more times to get a range of values to calculate the expectation.
+
 ```{r}
 markov.trials<-100000
 markov.p<-0.48
@@ -183,9 +170,7 @@ for (t in 1:length(rng)) {
 }
 ```
   
-  
   c. Repeat again, keeping the initial probability at 48%, but this time change the probability increment to a value different from 1%. Get the expected return after 100 repetitions. Keep changing this value until you have a return value that is as fair as you can make it. 
-
 
 4. Creating a Bootstrap function. There is a particular concept called [bootstrapping]
 (https://en.wikipedia.org/wiki/Bootstrapping_(statistics)) where we can easily create 95% confidence intervals, even for complex estimators.
@@ -199,5 +184,32 @@ The steps of this process are:
   e. The upper bound of a 95% CI will be the 0.975 percentile
 
 Make a function called `boot_ci` which calculates the 95% confidence interval in this manner. 
+
+```{r}
+boot_ci = function(x, iter, statistic = mean) {
+  #x: data to sample from
+  #iter: number of times you will draw a sample
+  boot_statistic = numeric()
+  for (i in 1:iter){
+    boot_sample = sample(x, size = length(x), replace=TRUE)
+    boot_statistic[i] <- as.function(statistic)(boot_sample)
+  }
+  boot_se <- sd(boot_statistic)
+  return(boot_se)
+}
+
+# Assumptions
+size = 10000
+mean = 0
+sd = 1
+mydata = rnorm(size, mean, sd)
+mydata_mean = mean(mydata)
+hist(mydata)
+
+mydata_se = boot_ci(mydata, 1000)
+
+mydata_mean_ci = mydata_mean + qt( c(0.025, 0.975), length(mydata) - 1) * mydata_se
+mydata_mean_ci
+```
 
 5. For problems 3b and 3c, you calculated a mean value. Because you saved these final results in a vector, use the bootstrap to estimate the variance of the return in each case for your final answer. Once you have these results, which game has the smaller variance in returns?
