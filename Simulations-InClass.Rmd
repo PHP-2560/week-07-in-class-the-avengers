@@ -186,6 +186,7 @@ The steps of this process are:
 Make a function called `boot_ci` which calculates the 95% confidence interval in this manner. 
 
 ```{r}
+# HAVE TO FINISH THIS FUNCTION
 boot_ci = function(x, iter, statistic = mean) {
   #x: data to sample from
   #iter: number of times you will draw a sample
@@ -202,13 +203,13 @@ boot_ci = function(x, iter, statistic = mean) {
 size = 10000
 mean = 0
 sd = 1
-mydata = rnorm(size, mean, sd)
+mydata <- rnorm(size, mean, sd)
 mydata_mean = mean(mydata)
 hist(mydata)
 
-mydata_se = boot_ci(mydata, 1000)
+mydata_se=boot_ci(mydata, 1000)
 
-mydata_mean_ci = mydata_mean + qt( c(0.025, 0.975), length(mydata) - 1) * mydata_se
+mydata_mean_ci <- mydata_mean + qt( c(0.025, 0.975), length(mydata) - 1) * mydata_se
 mydata_mean_ci
 ```
 
