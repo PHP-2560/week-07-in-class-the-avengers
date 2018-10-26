@@ -108,7 +108,7 @@ mean.bust.roulette<-sapply(simul.roulette, function(x) length(x))
 mean.bust.roulette<-mean(mean.bust.roulette[mean.bust.roulette<5000])
 
 hand.100.roulette<-sapply(simul.roulette, "[", 100)
-hand.100.roueltte[is.na(hand.100.roulette)]<-0
+hand.100.roulette[is.na(hand.100.roulette)]<-0
 
 mean.100.roulette<-mean(hand.100.roulette, na.rm = TRUE)
 var.100.roulette<-var(hand.100.roulette, na.rm = TRUE)
@@ -186,14 +186,14 @@ The steps of this process are:
 Make a function called `boot_ci` which calculates the 95% confidence interval in this manner. 
 
 ```{r}
-# HAVE TO FINISH THIS FUNCTION
-boot_ci = function(x, iter, statistic = mean) {
+
+boot_ci = function(x, iter) {
   #x: data to sample from
   #iter: number of times you will draw a sample
   boot_statistic = numeric()
   for (i in 1:iter){
     boot_sample = sample(x, size = length(x), replace=TRUE)
-    boot_statistic[i] <- as.function(statistic)(boot_sample)
+    boot_statistic[i] <- mean(boot_sample)
   }
   boot_se <- sd(boot_statistic)
   return(boot_se)
@@ -207,10 +207,10 @@ mydata <- rnorm(size, mean, sd)
 mydata_mean = mean(mydata)
 hist(mydata)
 
-mydata_se=boot_ci(mydata, 1000)
+mydata_se=boot_ci(mydata, 10000)
 
 mydata_mean_ci <- mydata_mean + qt( c(0.025, 0.975), length(mydata) - 1) * mydata_se
-mydata_mean_ci
+
 ```
 
 5. For problems 3b and 3c, you calculated a mean value. Because you saved these final results in a vector, use the bootstrap to estimate the variance of the return in each case for your final answer. Once you have these results, which game has the smaller variance in returns?
